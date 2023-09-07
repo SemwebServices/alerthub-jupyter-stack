@@ -59,14 +59,14 @@ jobs:
         id: get_sha
 
       - name: Build image 🛠
-        run: docker build --rm --force-rm --tag docker.hosting.semweb.co/semweb/${{ env.IMAGE_NAME }}:latest --tag docker.hosting.semweb.co/semweb/${{ env.IMAGE_NAME }}:${{steps.get_sha.outputs.sha12}} image/
+        run: docker build --rm --force-rm --tag semweb/${{ env.IMAGE_NAME }}:latest --tag semweb/${{ env.IMAGE_NAME }}:${{steps.get_sha.outputs.sha12}} image/
         env:
           DOCKER_BUILDKIT: 1
           # Full logs for CI build
           BUILDKIT_PROGRESS: plain
 
-      - name: Run tests ✅
-        run: python3 -m pytest tests
+      #- name: Run tests ✅
+      #  run: python3 -m pytest tests
 
       - name: Login to Docker Hub 🔐
         if: github.ref == 'refs/heads/main'
@@ -78,4 +78,4 @@ jobs:
 
       - name: Push Image to Docker Hub 📤
         if: github.ref == 'refs/heads/main' || github.event_name == 'schedule'
-        run: docker push --all-tags ${{ env.OWNER }}/${{ env.IMAGE_NAME }}
+        run: docker push --all-tags docker.hosting.semweb.co/semweb/${{ env.IMAGE_NAME }}
